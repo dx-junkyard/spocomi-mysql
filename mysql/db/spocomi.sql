@@ -220,26 +220,6 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityConnections` (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `spocomidb`.`CommunityInvitations`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `spocomidb`.`CommunityInvitations` ;
-
-CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityInvitations` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  -- プライマリキーとして自動インクリメントの招待ID
-    `destination_id` BIGINT UNSIGNED NOT NULL,               -- 招待先のID (コミュニティID、イベントIDなど)
-    `invitation_type` ENUM('community', 'event') NOT NULL,    -- 招待タイプ (コミュニティ or イベント)
-    `remaining_uses` INT UNSIGNED NOT NULL DEFAULT 1,         -- 残り利用回数 (デフォルトは1回)
-    `invitation_code` VARCHAR(255) NOT NULL UNIQUE,           -- 招待コード (ユニーク制約付き)
-    `expiration_at` DATETIME NOT NULL,                               -- 招待コードの有効期限
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,         -- 招待が作成された日時
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 更新日時
-    PRIMARY KEY (id),                            -- 招待IDをプライマリキーに設定
-    INDEX idx_invitation_code (invitation_code),            -- 招待コードのインデックス
-    INDEX idx_destination_id (destination_id),              -- 招待先IDのインデックス
-    INDEX idx_invitation_type (invitation_type)             -- 招待タイプのインデックス
-) ENGINE = InnoDB;
-
--- -----------------------------------------------------
 -- Table `spocomidb`.`EventInvitations`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `spocomidb`.`EventInvitations` ;
@@ -267,19 +247,19 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`EventInvitations` (
 DROP TABLE IF EXISTS `spocomidb`.`Communities` ;
 
 CREATE TABLE IF NOT EXISTS `spocomidb`.`Communities` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `owner_id` VARCHAR(64) NOT NULL,
-  `place_id` BIGINT NULL,
-  `name` VARCHAR(128) NULL,
-  `thumbnail_image_url` VARCHAR(256) NULL,
-  `thumbnail_message` VARCHAR(256) NULL,
-  `thumbnail_pr` VARCHAR(45) NULL,
-  `description` VARCHAR(1000) NULL,
-  `member_count` INT NULL,
-  `visibility` INT NULL,
-  `profile_image_url` VARCHAR(256) NULL,
-  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id` BIGINT NOT NULL AUTO_INCREMENT, -- コミュニティID
+  `owner_id` VARCHAR(64) NOT NULL, -- 代表者
+  `place_id` BIGINT NULL,  -- 主な活動場所（拠点）
+  `name` VARCHAR(128) NULL,  -- コミュニティ名
+  `thumbnail_image_url` VARCHAR(256) NULL, -- コミュニティリスト表示の際の写真
+  `thumbnail_message` VARCHAR(256) NULL, -- コミュニティリスト表示の際のよびかけ文章
+  `thumbnail_pr` VARCHAR(45) NULL,  -- コミュニティリスト表示の際の募集文
+  `description` VARCHAR(1000) NULL, -- コミュニティの説明
+  `member_count` INT NULL,  -- メンバー数
+  `visibility` INT NULL,  -- コミュニティ情報開示範囲
+  `profile_image_url` VARCHAR(256) NULL,  -- コミュニティのプロフィール写真
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 作成日時
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- 更新日時
   `status` INT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
