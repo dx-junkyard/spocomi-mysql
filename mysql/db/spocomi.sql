@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`Equipments` (
   `equipment_id` BIGINT NOT NULL AUTO_INCREMENT,
   `equipment_n` INT NOT NULL DEFAULT 1,
   `name` VARCHAR(100) NOT NULL,
-  `owner_id` VARCHAR(64) NULL COMMENT 'このアイテムの登録状態の変更、削除が可能なLINEグループ',
+  `owner_id` VARCHAR(64) NULL COMMENT 'このアイテムの所有者',
   `picture_path` VARCHAR(256) NULL,
   `status` INT NOT NULL DEFAULT 0,
   `comment` VARCHAR(500) NULL COMMENT '備品の状態などを記載',
@@ -170,7 +170,8 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`FacilityReservations` (
 DROP TABLE IF EXISTS `spocomidb`.`Users` ;
 
 CREATE TABLE IF NOT EXISTS `spocomidb`.`Users` (
-  `user_id` VARCHAR(64) NOT NULL,
+  `user_id` VARCHAR(64) NOT NULL UNIQUE,
+  `line_id` VARCHAR(64) NOT NULL UNIQUE,
   `password` VARCHAR(512) NULL,
   `name` VARCHAR(64) NOT NULL,
   `email` VARCHAR(256) NULL,
@@ -215,8 +216,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityConnections` (
     INDEX idx_invitation_code (invitation_code),        -- 招待コードのインデックス
     INDEX idx_parent_id (parent_id),          -- 親idのインデックス
     INDEX idx_child_id (child_id),            -- 子idのインデックス
-    INDEX idx_status_id (status),            -- statusのインデックス
-    INDEX idx_invitation_code (invitation_code)         -- 招待タイプのインデックス
+    INDEX idx_status_id (status)            -- statusのインデックス
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -251,9 +251,9 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`Communities` (
   `owner_id` VARCHAR(64) NOT NULL, -- 代表者
   `place_id` BIGINT NULL,  -- 主な活動場所（拠点）
   `name` VARCHAR(128) NULL,  -- コミュニティ名
-  `thumbnail_image_url` VARCHAR(256) NULL, -- コミュニティリスト表示の際の写真
-  `thumbnail_message` VARCHAR(256) NULL, -- コミュニティリスト表示の際のよびかけ文章
-  `thumbnail_pr` VARCHAR(45) NULL,  -- コミュニティリスト表示の際の募集文
+  `summary_image_url` VARCHAR(256) NULL, -- コミュニティリスト表示の際の写真
+  `summary_message` VARCHAR(256) NULL, -- コミュニティリスト表示の際のよびかけ文章
+  `summary_pr` VARCHAR(45) NULL,  -- コミュニティリスト表示の際の募集文
   `description` VARCHAR(1000) NULL, -- コミュニティの説明
   `member_count` INT NULL,  -- メンバー数
   `visibility` INT NULL,  -- コミュニティ情報開示範囲
@@ -276,6 +276,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityMembers` (
   `user_id` VARCHAR(64) NOT NULL,
   `role_id` INT NULL,
   `status` INT NULL COMMENT '参加申し込み、仮入会、正式会員',
+  `fav_flg` BOOLEAN NOT NULL DEFAULT 0, -- 0:初期値、1:
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
