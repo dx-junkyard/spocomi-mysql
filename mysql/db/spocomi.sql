@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`Communities` (
   `name` VARCHAR(128) NULL,  -- コミュニティ名
   `summary_image_url` VARCHAR(256) NULL, -- コミュニティリスト表示の際の写真
   `summary_message` VARCHAR(256) NULL, -- コミュニティリスト表示の際のよびかけ文章
-  `summary_pr` VARCHAR(45) NULL,  -- コミュニティリスト表示の際の募集文
+  `summary_pr` VARCHAR(256) NULL,  -- コミュニティリスト表示の際の募集文
   `description` VARCHAR(1000) NULL, -- コミュニティの説明
   `member_count` INT NULL,  -- メンバー数
   `visibility` INT NULL,  -- コミュニティ情報開示範囲
@@ -271,7 +271,6 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`Communities` (
 DROP TABLE IF EXISTS `spocomidb`.`CommunityMembers` ;
 
 CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityMembers` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `community_id` BIGINT NOT NULL,
   `user_id` VARCHAR(64) NOT NULL,
   `role_id` INT NULL,
@@ -279,7 +278,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityMembers` (
   `fav_flg` BOOLEAN NOT NULL DEFAULT 0, -- 0:初期値、1:
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `unique_community_user` (`community_id`, `user_id`)
 ) ENGINE = InnoDB;
 
 
