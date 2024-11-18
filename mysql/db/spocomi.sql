@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `spocomidb`.`CommunityConnections` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,       -- プライマリキーとして自動インクリメントの招待ID
     `parent_id` BIGINT UNSIGNED NOT NULL,               -- 親ID
     `child_id` BIGINT UNSIGNED NOT NULL,                -- 子ID
-    `invitation_code` VARCHAR(255) NOT NULL UNIQUE,     -- 招待コード (ユニーク制約付き)
+    `invitation_code` VARCHAR(255) NOT NULL,     -- 招待コード (ユニーク制約付き)
     `status` ENUM('INVITED', 'DECLINED', 'JOINED', 'LEFT') NOT NULL DEFAULT 'INVITED',
     `expiration_at` DATETIME NOT NULL,                  -- 招待コードの有効期限
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,   -- 招待が作成された日時
